@@ -17,9 +17,8 @@ inputEl.addEventListener("input", debounce(findCountry, DEBOUNCE_DELAY));
 function findCountry(e) {
   const query = e.target.value.trim();
 
-  if (query === "") {
-    infoEl.style.border = "";
-    infoEl.innerHTML = "";
+  if (!query) {
+    cleaning();
 
     return;
   }
@@ -31,8 +30,7 @@ function findCountry(e) {
         Notiflix.Notify.info(
           "Too many matches found. Please enter a more specific name."
         );
-        infoEl.style.border = "";
-        infoEl.innerHTML = "";
+        cleaning();
         return;
       } else if (data.length <= 10 && data.length > 1) {
         renderList(data);
@@ -43,15 +41,19 @@ function findCountry(e) {
     .catch((err) => {
       console.log(err);
 
-      if (query === "") {
+      if (!query) {
         return;
       }
 
-      infoEl.style.border = "";
-      infoEl.innerHTML = "";
+      cleaning();
 
       Notiflix.Notify.failure("Oops, there is no country with that name");
     });
+}
+
+function cleaning() {
+  infoEl.style.border = "";
+  infoEl.innerHTML = "";
 }
 
 function renderInfo(data) {
